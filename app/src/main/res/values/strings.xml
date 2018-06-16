@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">YamViewer</string>
+    <string name="confirm">確認</string>
+    <string name="hint_enter_user_name">請輸入帳號</string>
+    <string name="hint_enter_album_id">請輸入相簿id</string>
+
+</resources>
