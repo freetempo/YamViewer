@@ -45,5 +45,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         Log.d("Larry test", "user: " + userName + " album: " + albumId);
+
+        AlbumListActivity.launch(this, userName);
     }
 }
