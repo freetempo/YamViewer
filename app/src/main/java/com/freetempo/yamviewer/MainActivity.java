@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText userNameEdit, albumIdEdit;
+    private EditText userNameEdit;
     private Button submitButton;
 
     @Override
@@ -24,7 +24,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void getViews() {
         userNameEdit = findViewById(R.id.user_name);
-        albumIdEdit = findViewById(R.id.album_id);
         submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener(this);
     }
@@ -33,18 +32,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onClick(View view) {
         String userName = userNameEdit.getText().toString();
-        String albumId = albumIdEdit.getText().toString();
         // check input strings
         if (TextUtils.isEmpty(userName)) {
             Toast.makeText(this, "帳號不可為空", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (TextUtils.isEmpty(albumId)) {
-            Toast.makeText(this, "相簿id不可為空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        Log.d("Larry test", "user: " + userName + " album: " + albumId);
 
         AlbumListActivity.launch(this, userName);
     }

@@ -6,7 +6,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/album_list_recycler_view"
+        android:id="@+id/browse_album_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:scrollbars="vertical" />
@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:text="@string/previous_page"
         android:layout_gravity="bottom"
-        app:layout_constraintTop_toBottomOf="@id/album_list_recycler_view"
+        app:layout_constraintTop_toBottomOf="@id/browse_album_recycler_view"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
     <Button
@@ -26,7 +26,7 @@
         android:layout_height="wrap_content"
         android:text="@string/next_page"
         app:layout_constraintStart_toEndOf="@id/btn_previous_page"
-        app:layout_constraintTop_toBottomOf="@id/album_list_recycler_view"
+        app:layout_constraintTop_toBottomOf="@id/browse_album_recycler_view"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
 </android.support.constraint.ConstraintLayout>

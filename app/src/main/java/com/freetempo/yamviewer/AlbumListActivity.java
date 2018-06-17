@@ -13,6 +13,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -39,6 +41,9 @@ public class AlbumListActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private AlbumListAdapter adapter;
 
+    private int currentPage = 1;
+
+
     // launch this activity
     public static void launch(Context context, String userName) {
         Intent intent = new Intent(context, AlbumListActivity.class);
@@ -46,47 +51,76 @@ public class AlbumListActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album_list);
 
         userName = getIntent().getStringExtra(KEY_USER_NAME);
-        Log.d("Larry test", "AlbumListActivity onCreate: " + userName);
+
+        initPageButtons();
 
         recyclerView = findViewById(R.id.album_list_recycler_view);
         adapter = new AlbumListAdapter(this);
         // grid layout
         GridLayoutManager layoutManager = new GridLayoutManager(this, 2);
         // linear layout
-//        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-//        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        // LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        // layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
 
         requestQueue = Volley.newRequestQueue(this);
 
-        getAlbumList();
+        getAlbumList(currentPage);
     }
 
-    private void getAlbumList() {
-        JsonObjectRequest request = new JsonObjectRequest(createUrlString(userName, 1),
+    private void initPageButtons() {
+        final Button preButton = findViewById(R.id.btn_previous_page);
+        preButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (currentPage <= 1) {
+                    Toast.makeText(preButton.getContext(), "已經在第1頁",
+                            Toast.LENGTH_SHORT).show();
+                } else {
+                    getAlbumList(--currentPage);
+                }
+            }
+        });
+
+        Button nextButton = findViewById(R.id.btn_next_page);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getAlbumList(++currentPage);
+            }
+        });
+
+    }
+
+    private void getAlbumList(int page) {
+        JsonObjectRequest request = new JsonObjectRequest(createUrlString(userName, page),
                 null, new Response.Listener<JSONObject>() {
             @Override
             public void onResponse(JSONObject response) {
-                Log.d("Larry test", "onResponse: " + response.toString());
                 adapter.updateList(parseAlbums(response));
+                recyclerView.smoothScrollToPosition(0);
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.d("Larry test", "onError: " + error.toString());
+                Log.e(TAG, "onError: " + error.toString());
             }
         }
         );
 
         requestQueue.add(request);
+        String pageNow
+                = new StringBuilder("第").append(Integer.toString(page)).append("頁").toString();
+        Toast.makeText(this, pageNow, Toast.LENGTH_SHORT).show();
     }
 
     private List<AlbumInfo> parseAlbums(JSONObject rawObject) {
@@ -99,13 +133,10 @@ public class AlbumListActivity extends AppCompatActivity {
 
         JSONArray albumArray = rawObject.optJSONObject("data").optJSONArray("albums");
         for (int i = 0; i < albumArray.length(); i++) {
-//            Log.d("Larry test", "album " + i + " " +
-//                    albumArray.optJSONObject(i).optString("name"));
             AlbumInfo albumInfo = new AlbumInfo(albumArray.optJSONObject(i));
+            // set username due to no user name field in the JSON
+            albumInfo.setUserName(userName);
             list.add(albumInfo);
-
-            Log.d("Larry test", "album name: " + albumInfo.getName());
-            Log.d("Larry test", "cover: " + albumInfo.getCover());
         }
         return list;
     }
@@ -119,7 +150,6 @@ public class AlbumListActivity extends AppCompatActivity {
                 .append(albumStatus)
                 .append("&page=")
                 .append(Integer.toString(page));
-        Log.d("Larry test", "createUrlString: " + builder.toString());
         return builder.toString();
     }
 

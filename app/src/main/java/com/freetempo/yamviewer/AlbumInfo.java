@@ -4,6 +4,8 @@ import org.json.JSONObject;
 
 public class AlbumInfo {
 
+    private String userName = "";
+
     private String id, name, description, cover, diskSpace, password, version, visible, status;
     private String imageTable, albumStatus;
     private int photos, categoryId;
@@ -29,7 +31,17 @@ public class AlbumInfo {
         albumStatus = jsonObject.optString("album_status");
     }
 
+    // setters
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+
     // getters
+    public String getUserName() {
+        return userName;
+    }
+
     public String getId() {
         return id;
     }
