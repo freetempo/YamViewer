@@ -14,5 +14,10 @@
     <string name="photos_quantity">%1$d張照片</string>
     <string name="already_first_page">已經在第1頁</string>
     <string name="already_last_page">已在最後一頁(%1$d)</string>
+    <string name="view_count">%1$d次觀看</string>
+    <string name="locked_albums">已鎖</string>
+    <string name="open_albums">公開</string>
+    <string name="all_albums">所有</string>
+    <string name="locked_album_prefix">(鎖)\ </string>
 
 </resources>

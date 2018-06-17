@@ -1,5 +1,6 @@
 package com.freetempo.yamviewer;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.View;
@@ -25,7 +26,8 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
     public void bind(final AlbumInfo albumInfo) {
         // load cover
         final String coverLink = albumInfo.getCover();
-        Glide.with(itemView.getContext()).load(coverLink).into(cover);
+        final Context context = itemView.getContext();
+        Glide.with(context).load(coverLink).into(cover);
         // set click cover event
         cover.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -35,7 +37,7 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
 //                itemView.getContext().startActivity(browseIntent);
 
                 // open browse page
-                BrowseAlbumActivity.launch(itemView.getContext(),
+                BrowseAlbumActivity.launch(context,
                         albumInfo.getUserName(), albumInfo.getId());
 
             }
@@ -47,17 +49,21 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
                 String description = albumInfo.getDescription();
                 String showText;
                 if (TextUtils.isEmpty(description)) {
-                    showText = itemView.getContext().getResources()
+                    showText = context.getResources()
                             .getString(R.string.no_album_description);
                 } else {
                     showText = description;
                 }
-                ToastUtil.showToast(itemView.getContext(), showText);
+                ToastUtil.showToast(context, showText);
                 return true;
             }
         });
 
-        name.setText(albumInfo.getName());
+        String nameString = albumInfo.getName();
+        if (albumInfo.getAlbumStatus().equals("passwd")) {
+            nameString = context.getString(R.string.locked_album_prefix) + nameString;
+        }
+        name.setText(nameString);
         String desc = albumInfo.getDescription();
         description.setText(albumInfo.getDescription());
         if (TextUtils.isEmpty(desc)) {
@@ -66,7 +72,10 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
             description.setVisibility(View.VISIBLE);
         }
         // photoNumber.setText(Integer.toString(albumInfo.getPhotos()));
-        photoNumber.setText(String.format(itemView.getContext()
-                .getString(R.string.photos_quantity), albumInfo.getPhotos()));
+        String imageNumber = String.format(context
+                .getString(R.string.photos_quantity), albumInfo.getPhotos());
+        String viewCount = String.format(context.getString(R.string.view_count), albumInfo.getViewCount());
+        String showString = imageNumber + "  .  " + viewCount;
+        photoNumber.setText(showString);
     }
 }

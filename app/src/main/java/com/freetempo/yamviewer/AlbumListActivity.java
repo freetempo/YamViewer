@@ -61,6 +61,7 @@ public class AlbumListActivity extends AppCompatActivity {
         userName = getIntent().getStringExtra(KEY_USER_NAME);
 
         initPageButtons();
+        initAlbumTypeButtons();
 
         recyclerView = findViewById(R.id.album_list_recycler_view);
         adapter = new AlbumListAdapter(this);
@@ -108,6 +109,32 @@ public class AlbumListActivity extends AppCompatActivity {
 
     }
 
+    private void initAlbumTypeButtons() {
+        Button allButton = findViewById(R.id.btn_all_albums);
+        Button openButton = findViewById(R.id.btn_open_albums);
+        Button lockedButton = findViewById(R.id.btn_locked_albums);
+
+        View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int viewId = view.getId();
+                if (viewId == R.id.btn_all_albums) {
+                    albumStatus = "all";
+                } else if (viewId == R.id.btn_open_albums) {
+                    albumStatus = "open";
+                } else if (viewId == R.id.btn_locked_albums) {
+                    albumStatus = "passwd";
+                }
+                currentPage = 1;
+                getAlbumList(currentPage);
+            }
+        };
+
+        allButton.setOnClickListener(onClickListener);
+        openButton.setOnClickListener(onClickListener);
+        lockedButton.setOnClickListener(onClickListener);
+    }
+
     private void getAlbumList(int page) {
         JsonObjectRequest request = new JsonObjectRequest(createUrlString(userName, page),
                 null, new Response.Listener<JSONObject>() {
@@ -136,17 +163,20 @@ public class AlbumListActivity extends AppCompatActivity {
             Log.e(TAG, "parse album error. code: " + code);
         }
 
+        JSONObject dataObject = rawObject.optJSONObject("data");
         List<AlbumInfo> list = new ArrayList<>();
+        JSONObject viewCountObject = dataObject.optJSONObject("pv");
 
-        JSONArray albumArray = rawObject.optJSONObject("data").optJSONArray("albums");
+        JSONArray albumArray = dataObject.optJSONArray("albums");
         for (int i = 0; i < albumArray.length(); i++) {
             AlbumInfo albumInfo = new AlbumInfo(albumArray.optJSONObject(i));
             // set username due to no user name field in the JSON
             albumInfo.setUserName(userName);
+            // set view count
+            albumInfo.setViewCount(Integer.parseInt(viewCountObject.optString(albumInfo.getId())));
             list.add(albumInfo);
         }
-        isLastPage = rawObject.optJSONObject("data").optBoolean("lastPage");
-        Log.d("Larry test", "lastPage: " + isLastPage);
+        isLastPage = dataObject.optBoolean("lastPage");
         return list;
     }
 

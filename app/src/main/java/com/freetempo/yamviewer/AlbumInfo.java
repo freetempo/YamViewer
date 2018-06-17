@@ -8,7 +8,7 @@ public class AlbumInfo {
 
     private String id, name, description, cover, diskSpace, password, version, visible, status;
     private String imageTable, albumStatus;
-    private int photos, categoryId;
+    private int photos, categoryId, viewCount;
     private long sort, bloggerId, createdAt, updatedAt;
 
     public AlbumInfo(JSONObject jsonObject) {
@@ -36,6 +36,9 @@ public class AlbumInfo {
         this.userName = userName;
     }
 
+    public void setViewCount(int viewCount) {
+        this.viewCount = viewCount;
+    }
 
     // getters
     public String getUserName() {
@@ -109,4 +112,10 @@ public class AlbumInfo {
     public long getUpdatedAt() {
         return updatedAt;
     }
+
+    public int getViewCount() {
+        return viewCount;
+    }
+
+
 }
