@@ -14,13 +14,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.freetempo.yamviewer.utils.ToastUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -42,6 +42,7 @@ public class AlbumListActivity extends AppCompatActivity {
     private AlbumListAdapter adapter;
 
     private int currentPage = 1;
+    private boolean isLastPage = false;
 
 
     // launch this activity
@@ -83,19 +84,25 @@ public class AlbumListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (currentPage <= 1) {
-                    Toast.makeText(preButton.getContext(), "已經在第1頁",
-                            Toast.LENGTH_SHORT).show();
+                    Context context = preButton.getContext();
+                    ToastUtil.showToast(context, context.getString(R.string.already_first_page));
                 } else {
                     getAlbumList(--currentPage);
                 }
             }
         });
 
-        Button nextButton = findViewById(R.id.btn_next_page);
+        final Button nextButton = findViewById(R.id.btn_next_page);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getAlbumList(++currentPage);
+                if (isLastPage) {
+                    Context context = nextButton.getContext();
+                    ToastUtil.showToast(context, String.format(context.getString(
+                            R.string.already_last_page), currentPage));
+                } else {
+                    getAlbumList(++currentPage);
+                }
             }
         });
 
@@ -120,7 +127,7 @@ public class AlbumListActivity extends AppCompatActivity {
         requestQueue.add(request);
         String pageNow
                 = new StringBuilder("第").append(Integer.toString(page)).append("頁").toString();
-        Toast.makeText(this, pageNow, Toast.LENGTH_SHORT).show();
+        ToastUtil.showToast(this, pageNow);
     }
 
     private List<AlbumInfo> parseAlbums(JSONObject rawObject) {
@@ -138,6 +145,8 @@ public class AlbumListActivity extends AppCompatActivity {
             albumInfo.setUserName(userName);
             list.add(albumInfo);
         }
+        isLastPage = rawObject.optJSONObject("data").optBoolean("lastPage");
+        Log.d("Larry test", "lastPage: " + isLastPage);
         return list;
     }
 

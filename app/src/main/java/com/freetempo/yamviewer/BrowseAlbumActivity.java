@@ -13,7 +13,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -22,6 +21,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
+import com.freetempo.yamviewer.utils.ToastUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -85,8 +85,8 @@ public class BrowseAlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (currentPage <= 1) {
-                    Toast.makeText(preButton.getContext(), "已經在第1頁",
-                            Toast.LENGTH_SHORT).show();
+                    Context context = preButton.getContext();
+                    ToastUtil.showToast(context, context.getString(R.string.already_first_page));
                 } else {
                     getPhotos(--currentPage);
                 }
@@ -98,8 +98,9 @@ public class BrowseAlbumActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (isLastPage) {
-                    Toast.makeText(nextButton.getContext(), "已在最後一頁(" + currentPage + ")",
-                            Toast.LENGTH_SHORT).show();
+                    Context context = nextButton.getContext();
+                    ToastUtil.showToast(context, String.format(context.getString(
+                            R.string.already_last_page), currentPage));
                 } else {
                     getPhotos(++currentPage);
                 }
@@ -136,7 +137,7 @@ public class BrowseAlbumActivity extends AppCompatActivity {
         requestQueue.add(request);
         String pageNow
                 = new StringBuilder("第").append(Integer.toString(page)).append("頁").toString();
-        Toast.makeText(this, pageNow, Toast.LENGTH_SHORT).show();
+        ToastUtil.showToast(this, pageNow);
     }
 
     private void parsePhotos(JSONObject rawObject) {
@@ -149,7 +150,7 @@ public class BrowseAlbumActivity extends AppCompatActivity {
             StringBuilder errorMessage = new StringBuilder();
             errorMessage.append(code).append(": ").append(rawObject.optString("message"));
             Log.e(TAG, "get photos error: " + errorMessage.toString());
-            Toast.makeText(this, errorMessage.toString(), Toast.LENGTH_SHORT).show();
+            ToastUtil.showToast(this, errorMessage.toString());
             return;
         }
 
