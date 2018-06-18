@@ -152,9 +152,7 @@ public class AlbumListActivity extends AppCompatActivity {
         );
 
         requestQueue.add(request);
-        String pageNow
-                = new StringBuilder("第").append(Integer.toString(page)).append("頁").toString();
-        ToastUtil.showToast(this, pageNow);
+        ToastUtil.showToast(this, String.format(getString(R.string.page_number), page));
     }
 
     private List<AlbumInfo> parseAlbums(JSONObject rawObject) {

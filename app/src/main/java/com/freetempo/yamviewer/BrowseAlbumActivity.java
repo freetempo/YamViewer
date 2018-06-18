@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -32,7 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BrowseAlbumActivity extends AppCompatActivity {
+public class BrowseAlbumActivity extends FragmentActivity {
 
     private static final String TAG = "BrowseAlbumActivity";
 
@@ -135,9 +136,7 @@ public class BrowseAlbumActivity extends AppCompatActivity {
             }
         };
         requestQueue.add(request);
-        String pageNow
-                = new StringBuilder("第").append(Integer.toString(page)).append("頁").toString();
-        ToastUtil.showToast(this, pageNow);
+        ToastUtil.showToast(this, String.format(getString(R.string.page_number), page));
     }
 
     private void parsePhotos(JSONObject rawObject) {

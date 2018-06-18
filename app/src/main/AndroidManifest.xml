@@ -13,15 +13,24 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".MainActivity"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AlbumListActivity" />
-        <activity android:name=".BrowseAlbumActivity" />
+
+        <activity
+            android:name=".AlbumListActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+
+        <activity
+            android:name=".BrowseAlbumActivity"
+            android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen" />
+
     </application>
 
 </manifest>
