@@ -3,8 +3,9 @@
     <string name="app_name">YamViewer</string>
     <string name="confirm">確認</string>
     <string name="clear">清除</string>
+    <string name="clear_history">清除歷史紀錄</string>
     <string name="hint_enter_user_name">請輸入帳號</string>
-    <string name="hint_enter_album_id">請輸入相簿id</string>
+    <string name="user_name_cant_be_empty">帳號不可為空</string>
     <string name="default_user_name">david520lisa</string>
     <string name="default_album_id">9194202</string>
     <string name="previous_page">上一頁</string>
@@ -21,5 +22,6 @@
     <string name="all_albums">所有</string>
     <string name="locked_album_prefix">(鎖)\ </string>
     <string name="pop_user_name">常用帳號</string>
+    <string name="search_history_list">瀏覽紀錄</string>
 
 </resources>
