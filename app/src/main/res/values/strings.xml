@@ -20,5 +20,6 @@
     <string name="open_albums">公開</string>
     <string name="all_albums">所有</string>
     <string name="locked_album_prefix">(鎖)\ </string>
+    <string name="pop_user_name">常用帳號</string>
 
 </resources>

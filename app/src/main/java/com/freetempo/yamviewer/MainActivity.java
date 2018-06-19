@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
@@ -43,6 +44,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         userNameEdit.setAdapter(
                 new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list));
 
+        userNameEdit.setCompletionHint(getResources().getString(R.string.pop_user_name));
+        userNameEdit.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                userNameEdit.showDropDown();
+            }
+        });
     }
 
     @Override
