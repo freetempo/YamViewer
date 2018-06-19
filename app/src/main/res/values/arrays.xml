@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="frequent_use_user_name">
+        <item>intome</item>
+        <item>david520lisa </item>
+        <item>amywang53</item>
+        <item>apple730</item>
+        <item>chanfa</item>
+        <item>cwl</item>
+        <item>kitty520pig</item>
+        <item>cts003</item>
+        <item>deyun</item>
+        <item>ismynewlife</item>
+        <item>isthreezero</item>
+        <item>appleofeye</item>
+        <item>j1623</item>
+        <item>kingslife</item>
+        <item>k540321</item>
+    </string-array>
+
+</resources>

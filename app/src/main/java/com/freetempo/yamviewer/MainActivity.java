@@ -5,14 +5,20 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.freetempo.yamviewer.utils.ToastUtil;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText userNameEdit;
+    private AutoCompleteTextView userNameEdit;
     private Button submitButton, cleatButton;
 
     @Override
@@ -23,13 +29,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void getViews() {
-        userNameEdit = findViewById(R.id.user_name);
+        initAutoCompleteEditText();
         submitButton = findViewById(R.id.submit_button);
         submitButton.setOnClickListener(this);
         cleatButton = findViewById(R.id.clear_button);
         cleatButton.setOnClickListener(this);
     }
 
+    private void initAutoCompleteEditText() {
+        userNameEdit = findViewById(R.id.user_name);
+        List<String> list = new ArrayList<>(Arrays.asList(getResources()
+                .getStringArray(R.array.frequent_use_user_name)));
+        userNameEdit.setAdapter(
+                new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, list));
+
+    }
 
     @Override
     public void onClick(View view) {
