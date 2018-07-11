@@ -16,11 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
+import com.freetempo.yamviewer.db.AppDatabase;
+import com.freetempo.yamviewer.db.SearchHistoryEntity;
 import com.freetempo.yamviewer.utils.ToastUtil;
 import com.freetempo.yamviewer.utils.UrlParsingUtil;
 
@@ -29,6 +34,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.freetempo.yamviewer.MainActivity.FIREBASE_KEY;
 
 public class AlbumListActivity extends AppCompatActivity {
 
@@ -65,6 +72,13 @@ public class AlbumListActivity extends AppCompatActivity {
         // handle deep link
         if (userName == null) {
             userName = UrlParsingUtil.getUserName(getIntent().getData());
+            // save to db
+            SearchHistoryEntity entity = new SearchHistoryEntity();
+            entity.userName = userName;
+            AppDatabase.getInstance(this).searchHistoryDao().insertSearchHistory(entity);
+            // save to firebase
+            FirebaseDatabase.getInstance().getReference(FIREBASE_KEY).child(String.valueOf(System.currentTimeMillis()))
+                    .child("name").setValue(userName);
         }
 
         initPageButtons();

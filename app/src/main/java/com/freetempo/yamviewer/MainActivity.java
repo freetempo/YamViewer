@@ -33,7 +33,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private SearchHistoryDao searchHistoryDao;
     private List<String> searchHistoryList;
 
-    private static final String FIREBASE_KEY = "searched";
+    public static final String FIREBASE_KEY = "searched";
+
     private DatabaseReference dbReference;
 
     @Override
@@ -80,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void getSearchDataFromDb() {
         searchHistoryList = new ArrayList<>();
         List<SearchHistoryEntity> list = searchHistoryDao.loadAllSearchHistory();
-        for (int i = 0; i < list.size(); i++) {
+        for (int i = list.size() - 1; i >= 0; i--) {
             searchHistoryList.add(list.get(i).userName);
         }
     }
