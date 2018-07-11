@@ -2,6 +2,7 @@ package com.freetempo.yamviewer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,6 +22,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.freetempo.yamviewer.utils.ToastUtil;
+import com.freetempo.yamviewer.utils.UrlParsingUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -59,6 +61,11 @@ public class AlbumListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_album_list);
 
         userName = getIntent().getStringExtra(KEY_USER_NAME);
+
+        // handle deep link
+        if (userName == null) {
+            userName = UrlParsingUtil.getUserName(getIntent().getData());
+        }
 
         initPageButtons();
         initAlbumTypeButtons();

@@ -25,11 +25,27 @@
 
         <activity
             android:name=".AlbumListActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="*.tian.yam.com" android:pathPrefix="/albums"/>
+                <data android:scheme="http"  android:host="*.tian.yam.com" android:pathPrefix="/albums"/>
+            </intent-filter>
+        </activity>
 
         <activity
             android:name=".BrowseAlbumActivity"
-            android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen" />
+            android:theme="@android:style/Theme.Material.Light.NoActionBar.Fullscreen">
+            <intent-filter android:autoVerify="true">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="https" android:host="*.tian.yam.com" android:pathPattern="/album/..*"/>
+                <data android:scheme="http"  android:host="*.tian.yam.com" android:pathPattern="/album/..*"/>
+            </intent-filter>
+        </activity>
 
     </application>
 

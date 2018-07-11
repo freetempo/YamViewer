@@ -2,6 +2,7 @@ package com.freetempo.yamviewer;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -23,6 +24,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.freetempo.yamviewer.utils.ToastUtil;
+import com.freetempo.yamviewer.utils.UrlParsingUtil;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,6 +76,13 @@ public class BrowseAlbumActivity extends FragmentActivity {
         Intent intent = getIntent();
         userName = intent.getStringExtra(KEY_USER_NAME);
         albumId = intent.getStringExtra(KEY_ALBUM_ID);
+
+        // handle deep link
+        if (userName == null && albumId == null) {
+            Uri data = getIntent().getData();
+            userName = UrlParsingUtil.getUserName(data);
+            albumId = UrlParsingUtil.getAlbumId(data);
+        }
 
         requestQueue = Volley.newRequestQueue(this);
 
