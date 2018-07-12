@@ -32,10 +32,6 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
         cover.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // open photo by web
-//                Intent browseIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(coverLink));
-//                itemView.getContext().startActivity(browseIntent);
-
                 // open browse page
                 BrowseAlbumActivity.launch(context,
                         albumInfo.getUserName(), albumInfo.getId());
@@ -46,15 +42,7 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
         cover.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
-                String description = albumInfo.getDescription();
-                String showText;
-                if (TextUtils.isEmpty(description)) {
-                    showText = context.getResources()
-                            .getString(R.string.no_album_description);
-                } else {
-                    showText = description;
-                }
-                ToastUtil.showToast(context, showText);
+                ToastUtil.showToast(context, albumInfo.getAlbumInfoString());
                 return true;
             }
         });
@@ -71,7 +59,6 @@ public class AlbumItemHolder extends RecyclerView.ViewHolder {
         } else {
             description.setVisibility(View.VISIBLE);
         }
-        // photoNumber.setText(Integer.toString(albumInfo.getPhotos()));
         String imageNumber = String.format(context
                 .getString(R.string.photos_quantity), albumInfo.getPhotos());
         String viewCount = String.format(context.getString(R.string.view_count), albumInfo.getViewCount());

@@ -1,5 +1,7 @@
 package com.freetempo.yamviewer;
 
+import com.freetempo.yamviewer.utils.TimeUtil;
+
 import org.json.JSONObject;
 
 public class AlbumInfo {
@@ -29,6 +31,16 @@ public class AlbumInfo {
         createdAt = jsonObject.optLong("created_at");
         updatedAt = jsonObject.optLong("updated_at");
         albumStatus = jsonObject.optString("album_status");
+    }
+
+    public String getAlbumInfoString() {
+        return "相簿名稱: " + name + "\n" +
+                "相簿id: " + id + "\n" +
+                "相簿描述: " + description + "\n" +
+                "照片數目: " + photos + "\n" +
+                "觀看次數: " + viewCount + "\n" +
+                "創建時間: " + TimeUtil.getDateStringFromTimeStamp(createdAt) + "\n" +
+                "更新時間: " + TimeUtil.getDateStringFromTimeStamp(updatedAt);
     }
 
     // setters
