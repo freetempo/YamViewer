@@ -74,8 +74,7 @@ public class AlbumListActivity extends AppCompatActivity {
             entity.userName = userName;
             AppDatabase.getInstance(this).searchHistoryDao().insertSearchHistory(entity);
             // save to firebase
-            FirebaseDatabase.getInstance().getReference(FIREBASE_KEY).child(String.valueOf(System.currentTimeMillis()))
-                    .child("name").setValue(userName);
+            FirebaseDatabase.getInstance().getReference(FIREBASE_KEY).push().child("name").setValue(userName);
         }
 
         initPageButtons();

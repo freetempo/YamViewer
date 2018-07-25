@@ -120,7 +120,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void saveToFireBase(String userName) {
         // use timestamp as unique key id
         long timeStamp = System.currentTimeMillis();
-        dbReference.child(String.valueOf(timeStamp)).child("name").setValue(userName);
+        dbReference.push().child("name").setValue(userName);
     }
 
     // firebase functions
