@@ -2,7 +2,7 @@
 
     <string name="app_name">YamViewer</string>
     <string name="confirm">確認</string>
-    <string name="clear">清除</string>
+    <string name="clear">重新輸入</string>
     <string name="clear_history">清除歷史紀錄</string>
     <string name="hint_enter_user_name">請輸入帳號</string>
     <string name="user_name_cant_be_empty">帳號不可為空</string>

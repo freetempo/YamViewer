@@ -1,6 +1,8 @@
 package com.freetempo.yamviewer;
 
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -11,15 +13,34 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.freetempo.yamviewer.db.AppDatabase;
 import com.freetempo.yamviewer.db.SearchHistoryDao;
 import com.freetempo.yamviewer.db.SearchHistoryEntity;
 import com.freetempo.yamviewer.utils.ToastUtil;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener /* for firebase */  /* , ChildEventListener */ {
 
@@ -44,6 +65,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         getViews();
         
         // getFromFireBase();
+        dynamicTest();
+        dynamicTestAndroid();
     }
 
     @Override
@@ -51,6 +74,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onResume();
         getSearchDataFromDb();
         resetAutoCompleteAdapter();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (!TextUtils.isEmpty(userNameEdit.getText().toString())) {
+            userNameEdit.setText("");
+        } else {
+            super.onBackPressed();
+        }
     }
 
     private void getSearchDataFromDb() {
@@ -122,6 +154,78 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         long timeStamp = System.currentTimeMillis();
         dbReference.push().child("name").setValue(userName);
     }
+
+    // https://Ffreetempo.page.link
+    // test for firebase dynamic link
+    // AIzaSyB1yDmmqS-C9ZAfGYxotaR15O_lt-SA99o
+    private void dynamicTest() {
+        String url = "https://firebasedynamiclinks.googleapis.com/v1/shortLinks?key=AIzaSyB1yDmmqS-C9ZAfGYxotaR15O_lt-SA99o";
+        JSONObject jObject = new JSONObject();
+        try {
+            jObject.put("longDynamicLink", "https://freetempo.page.link/?link=https://www.example.com/&apn=com.example.android&ibi=com.example.ios");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, jObject, new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("Larry test", "onResponse: " + response);
+            }
+        },  new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.d("Larry test", "onErrorResponse: " + error.getMessage() + " " + error.toString());
+                Log.d("Larry test", "onErrorResponse: " + error.networkResponse.data.toString());
+            }
+        } )
+//        {
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String, String> map = new HashMap<String, String>();
+//                map.put("longDynamicLink", "https://example.page.link/?link=https://www.example.com/&apn=com.example.android&ibi=com.example.ios");
+////                map.put("page", Integer.toString(page));
+//                return map;
+//            }ㄢ
+//        }
+        ;
+
+        Volley.newRequestQueue(this).add(request);
+    }
+
+    private void dynamicTestAndroid() {
+        DynamicLink.Builder builder = FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse("https://www.example.com/"))
+                .setDynamicLinkDomain("https://freetempo.page.link/");
+//                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+//                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder("com.example.android").build())
+//                .setIosParameters(new DynamicLink.IosParameters.Builder("com.example.ios").build());
+        Log.d("Larry test", "buildDynamicLink(): " + builder.buildDynamicLink().getUri().toString());
+
+
+        builder.buildShortDynamicLink().addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+            @Override
+            public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                if (task.isSuccessful()) {
+                    Log.d("Larry test", "buildShortDynamicLink(): " + task.getResult().getShortLink());
+                    Log.d("Larry test", "buildShortDynamicLink() 2: " + task.getResult().getPreviewLink());
+                } else {
+                    Log.d("Larry test", "not successful: ");
+
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.d("Larry test", "onFail: " + e.getLocalizedMessage().toString());
+            }
+        });
+
+//        Log.d("Larry test", "buildShortDynamicLink(): " + builder.buildShortDynamicLink());
+    }
+
+
 
     // firebase functions
 
