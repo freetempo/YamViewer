@@ -1,5 +1,6 @@
 package com.freetempo.yamviewer;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -45,7 +46,7 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener /* for firebase */  /* , ChildEventListener */ {
 
     private AutoCompleteTextView userNameEdit;
-    private Button submitButton, cleatButton, clearHistoryButton;
+    private Button submitButton, cleatButton, clearHistoryButton, pcHomeButton;
     private SearchHistoryDao searchHistoryDao;
     private List<String> searchHistoryList;
 
@@ -101,6 +102,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         cleatButton.setOnClickListener(this);
         clearHistoryButton = findViewById(R.id.clear_history_button);
         clearHistoryButton.setOnClickListener(this);
+        pcHomeButton = findViewById(R.id.pchome_button);
+        pcHomeButton.setOnClickListener(this);
     }
 
     private void initAutoCompleteEditText() {
@@ -146,6 +149,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             searchHistoryDao.clearAllSearchHistory();
             getSearchDataFromDb();
             resetAutoCompleteAdapter();
+        } else if (view.getId() == R.id.pchome_button) {
+            startActivity(new Intent(this, PCHomeActivity.class));
         }
     }
 
@@ -284,4 +289,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        String got = String.valueOf(databaseError.getMessage());
 //        Log.d("Larry test", "DatabaseError got :" + got);
 //    }
+
+
+
 }
